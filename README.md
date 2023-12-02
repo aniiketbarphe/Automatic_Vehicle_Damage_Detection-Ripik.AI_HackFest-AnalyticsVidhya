@@ -80,4 +80,6 @@ Throughout the hackathon, you are expected to respect fellow hackers and act wit
 Use of multiple Login IDs will lead to immediate disqualification
 Analytics Vidhya holds the right to disqualify any participant at any stage of the competition if the participant(s) are deemed to be acting fraudulently.
 
+Link:- 
 
+https://datahack.analyticsvidhya.com/contest/ripikai-hackfest-unleashing-ai-potential/?utm_source=newhomepage#LeaderBoard
