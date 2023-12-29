@@ -83,3 +83,62 @@ Analytics Vidhya holds the right to disqualify any participant at any stage of t
 Link:- 
 
 https://datahack.analyticsvidhya.com/contest/ripikai-hackfest-unleashing-ai-potential/?utm_source=newhomepage#LeaderBoard
+
+# Data manipulation
+# Data Visualazation
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.set_theme()
+%matplotlib inline
+pd.set_option('display.max_columns', 1000)
+pd.set_option('display.max_rows', 1000)
+ 
+import warnings
+warnings.filterwarnings('ignore')
+
+import pycaret
+print('PyCaret: %s' % pycaret.__version__)
+from pycaret.classification import *
+
+s = setup(data=train,
+          session_id=7010,
+          target='ind',
+          train_size=0.99,
+          fold_strategy='stratifiedkfold',
+          fold=5,
+          fold_shuffle=True,
+          remove_multicollinearity = True,
+          normalize = True,
+          normalize_method = 'robust')
+top4 = compare_models(n_select=5)
+
+print(top4[1])
+
+LDA = tune_model(create_model('lda'), choose_better = True, n_iter = 20)
+plot_model(LDA, "feature")
+
+# Additional functions in Pycaret
+lgbm  = create_model('lightgbm')      
+tuned_lightgbm = tune_model(lgbm)
+plot_model(estimator = tuned_lightgbm, plot = 'learning')
+plot_model(estimator = tuned_lightgbm, plot = 'auc')
+plot_model(estimator = tuned_lightgbm, plot = 'confusion_matrix')
+plot_model(estimator = tuned_lightgbm, plot = 'feature')
+evaluate_model(tuned_lightgbm)
+# plotting number of correctly classified and misclassifed labels
+plot_model(tuned_model, plot = 'error')
+# plotting classification report
+plot_model(tuned_model, plot = 'class_report')
+
+predict_model(tuned_lightgbm, data=test)
+predictions = predict_model(tuned_lightgbm, data=test)
+predictions.head()
+
+sub['Survived'] = round(predictions['Score']).astype(int)
+sub.to_csv('submission.csv',index=False)
+sub.head()
+
+# Extra: Blending made easy!
+logr  = create_model('lr');          
+
+blend = blend_models(estimator_list=[tuned_lightgbm,logr])
